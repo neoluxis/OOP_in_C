@@ -10,4 +10,12 @@ add_executable(C main.c
         Animal.h
         Dog.c
         Dog.h
+        AccessControl/Parent.c
+        AccessControl/Parent.h
+        AccessControl/Child.c
+        AccessControl/Child.h
+        AccessControl/Alien.c
+        AccessControl/Alien.h
 )
+
+include_directories(AccessControl)

@@ -125,14 +125,66 @@ int main() {
 
 ## 访问控制 (Access Control)
 
-[//]: # (TODO: 未完成)
+在面相对象程序中，访问权限系统通常有
+
+- 公共 (Public)
+- 保护 (Protected)
+- 私有 (Private)
+
+由于本人能力有限，只能实现 `Public` 和 `Private` 两种访问权限。
+即子类和外部类均无法访问或均可以访问 `Private` 成员。
+
+实现思路如下：
+
+- 在头文件中定义结构体的公共域，假设命名为 `Parent`  
+  Parent.c
+  ```c
+  struct Parent {
+    int public_var;
+    void (*public_func)(struct Parent *this);
+    void (*private_var_setter)(struct Parent *this, int private_var);
+    int (*private_var_getter)(struct Parent *this);
+    void (*print)(struct Parent *this);
+  };
+  ```
+- 在源文件中定义另一个结构体，命名为 `ParentPriv`。其中先定义全部的公共域，
+  接着定义私有域。  
+  Parent.c
+  ```c
+  struct ParentPriv {
+    // public field (just copy)
+    int public_var;
+    void (*public_func)(struct Parent *this);
+    void (*private_var_setter)(struct Parent *this, int private_var);
+    int (*private_var_getter)(struct Parent *this);
+    void (*print)(struct Parent *this);
+    
+    // private field
+    int private_var;
+    void (*private_func)(struct Parent *this);
+  };
+  ```
+- 用同样的方法定义 `new()` 方法，但是在返回之前，定义的结构体变量都应该是 `ParentPriv`
+- 在返回前，将 `ParentPriv` 类型的变量强制转换为 `Parent` 类型的变量
+  ```c
+  static struct Parent new(int public_var) {
+    struct ParentPriv parent = {
+        .public_var = public_var,
+        .public_func = &public_func,
+        .private_var_setter = &private_var_setter,
+        .private_var_getter = &private_var_getter,
+        .print = &print,
+        .private_func = &private_func,
+    };
+    return *(struct Parent *) &parent;
+  } 
+  ```
+- 之后就可以使用 `new()` 方法来实例化一个对象，然后使用封装来访问私有变量
 
 ## 抽象类，抽象方法，接口 (Abstract Class, Abstract Method, Interface)
 
+[//]: # (TODO: )
+
 ## 命名空间 (Namespace)
 
----
-
-参考链接:
-
-1. [Class in C](https://pvv.ntnu.no/~hakonhal/main.cgi/c/classes/)
+[//]: # (TODO: )

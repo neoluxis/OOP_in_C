@@ -5,8 +5,8 @@
 #include "Dog.h"
 #include "stdio.h"
 
-static void say(struct Animal *self) {
-  struct Dog *this = (void *)self - offsetof(struct Dog, Animal);
+static void say(struct Animal *anml) {
+  struct Dog *this = (void *)anml - offsetof(struct Dog, Animal);
   printf("%d-year-old dog named %s barks\n", this->Animal.age, this->name);
 }
 

@@ -5,8 +5,8 @@
 #include "Animal.h"
 #include <stdio.h>
 
-static void say(struct Animal *self) {
-    printf("Im an animal, age: %d\n", self->age);
+static void say(struct Animal *this) {
+    printf("Im an animal, age: %d\n", this->age);
 }
 
 static struct Animal Animal_new(int age) {
