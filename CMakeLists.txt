@@ -18,6 +18,10 @@ add_executable(C main.c
         AccessControl/Alien.h
         StaticField/TestStatic.c
         StaticField/TestStatic.h
+        AbstractField/TestAbstract.c
+        AbstractField/TestAbstract.h
+        OverloadMethod/overload.c
+        OverloadMethod/overload.h
 )
 
-include_directories(AccessControl Classes Inheritance StaticField)
+include_directories(AccessControl Classes Inheritance StaticField AbstractField OverloadMethod)

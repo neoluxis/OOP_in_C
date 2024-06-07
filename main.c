@@ -6,6 +6,7 @@
 #include "Alien.h"
 #include "Child.h"
 #include "TestStatic.h"
+#include "overload.h"
 
 void animal_say(struct Animal *anm) {
   anm->say(anm);
@@ -44,7 +45,15 @@ void test_static_field() {
   printf("TestStatic.static_var: %d\n", TestStatic.static_var);
 }
 
+void test_overload() {
+  struct Overload o = Overload.new();
+  o.overloaded(&o, 1, 3);
+  o.overloaded(&o, 2, 3, 4);
+  o.overloaded(&o, 3, 3.14);
+}
+
 int main() {
-  test_static_field();
+  test_overload();
   return 0;
 }
+

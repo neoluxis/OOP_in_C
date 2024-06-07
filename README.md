@@ -216,15 +216,45 @@ int main() {
 绑定到同一个函数。静态域不可调用任何非静态域，因此可以在参数列表里面不
 列出 `this` 指针。
 
-类名和实例均可调用静态变量的实现方法：
-
-[//]: # (TODO)
+本人能力有限，没有实现静态变量在类和实例中均可调用，
 
 所以最好直接通过类名调用静态域。
 
 ## 抽象类，抽象方法，接口 (Abstract Class, Abstract Method, Interface)
 
-[//]: # (TODO: )
+抽象类和接口的成员函数没有实现，在子类中实现。同时不允许实例化抽象类和接口。
+
+不允许实例化很简单，可以在 `new()` 方法中返回 `NULL` 来表示实例化失败，或
+直接不添加 `new()` 方法使之无法被实例化。
+
+在子类的 `new()` 方法中，可以分别实现基类的接口方法，然后手动绑定给基类的
+函数指针。
+
+在这种情况下，静态域可能受到更改，因此类所对应的 Class 结构体不能再定义为 `const` 类型。
+
+TestStatic.h
+
+```c
+extern struct TestStaticClass {
+  int static_var; // instance counter
+  struct TestStatic (*new)(int instance_var);
+} TestStatic;
+```
+
+本人未能实现抽象方法。
+
+## 方法重载 (Method Overloading)
+
+方法重载是指在同一个类中，可以有多个同名函数，但是参数列表不同。
+
+在 C 语言中，函数重载是不被允许的，因为 C 语言编译时，不会像 C++ 一样
+把函数名和参数列表一起编译，而是只编译函数名。因此我们可以把重载的不同版本使用不同的函数名来标记，
+之后在同一个函数中对参数进行判断，来决定究竟是调用了哪一个函数。
+
+也就是说，手动指定重载版本是不能够省略的。
+
+参考 `/OverloadMethod/overload.c`,
+`/OverloadMethod/overload.h` 文件
 
 ## 命名空间 (Namespace)
 
