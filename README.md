@@ -10,7 +10,7 @@ struct Animal {
 };
 
 extern const struct AnimalClass {
-    struct Animal (*Complex_new)(...);
+    struct Animal (*new)(...);
 } Animal;
 ```
 
@@ -24,11 +24,12 @@ static struct Animal new(...) {
 }
 
 static const struct AnimalClass Animal = {
-  .Complex_new = &new,
+  .new = &new,
 };
 ```
 
-**注意： 如果在 `.c` 文件中不使用 `static` 定义函数，如果函数名称重复，就会报错**
+**注意： 如果在 `.c` 文件中不使用 `static` 关键字把函数定义局限到当前文件，
+函数名称重复的时候就会报错**
 
 main.c
 
@@ -40,15 +41,15 @@ struct Animal a = Animal.new(...);
 }
 ```
 
-定义一个常量用于实例化一个对象，然后使用这个 `Complex_new()` 方法
+定义一个常量用于实例化一个对象，然后使用这个 `new()` 方法
 
 ## 构造器 (Constructor)
 
-构造器只需要定义补充对应类的 `Complex_new()` 方法即可
+构造器只需要定义补充对应类的 `new()` 方法即可
 
 ## 成员和方法 (Member and Method)
 
-成员和方法可以在类的结构体中声明，之后在 `Complex_new()` 方法中初始化
+成员和方法可以在类的结构体中声明，之后在 `new()` 方法中初始化
 Animal.h
 
 ```c
@@ -58,7 +59,7 @@ struct Animal {
 };
 
 extern const struct AnimalClass {
-    struct Animal (*Complex_new)(int age);
+    struct Animal (*new)(int age);
 } Animal;
 ```
 
@@ -74,7 +75,7 @@ static void say(struct Animal *self) {
 static struct Animal new(int age) {
   struct Animal a = {
     .age = age,
-    .say = say,
+    .say = &say,
   };
   return a;
 }
@@ -92,7 +93,7 @@ int main() {
 }
 ```
 
-同时方法只在 `.c` 文件中定义，可以不在头文件中声明，方法就只能通过
+同时方法只在 `.c` 文件中定义，不在头文件中声明，这样方法就只能通过
 实例来调用。
 
 ## 继承 (Inheritance)
@@ -132,7 +133,8 @@ int main() {
 - 私有 (Private)
 
 由于本人能力有限，只能实现 `Public` 和 `Private` 两种访问权限。
-即子类和外部类均无法访问或均可以访问 `Private` 成员。
+即子类和外部类均无法访问 `Private` 成员或均可以访问 `Public` 成员；
+没有实现 子类可以访问，外部类不可访问的 `Protected` 成员。
 
 实现思路如下：
 
@@ -180,6 +182,44 @@ int main() {
   } 
   ```
 - 之后就可以使用 `new()` 方法来实例化一个对象，然后使用封装来访问私有变量
+
+## 静态域 (Static Field)
+
+静态域可以写在类所对应的 Class 结构体中，可以脱离类的结构体调用。  
+Animal.h
+
+```c
+struct Animal {
+  ...
+};
+
+extern const struct AnimalClass {
+    struct Animal (*new)(...);
+    int static_field;
+} Animal;
+```
+
+main.c
+
+```c
+#include "Animal.h"
+int main() {
+  Animal.static_field = 10;
+  return 0;
+}
+```
+
+但是这样的方法表明，静态域将只能通过类名调用，而不能通过实例调用。
+
+如果想要让类名和实例均可以调用静态方法，可以分别在两个结构体中定义，然后将其
+绑定到同一个函数。静态域不可调用任何非静态域，因此可以在参数列表里面不
+列出 `this` 指针。
+
+类名和实例均可调用静态变量的实现方法：
+
+[//]: # (TODO)
+
+所以最好直接通过类名调用静态域。
 
 ## 抽象类，抽象方法，接口 (Abstract Class, Abstract Method, Interface)
 

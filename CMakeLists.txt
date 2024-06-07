@@ -4,18 +4,20 @@ project(C C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(C main.c
-        Complex.h
-        Complex.c
-        Animal.c
-        Animal.h
-        Dog.c
-        Dog.h
+        Classes/Complex.h
+        Classes/Complex.c
+        Inheritance/Animal.c
+        Inheritance/Animal.h
+        Inheritance/Dog.c
+        Inheritance/Dog.h
         AccessControl/Parent.c
         AccessControl/Parent.h
         AccessControl/Child.c
         AccessControl/Child.h
         AccessControl/Alien.c
         AccessControl/Alien.h
+        StaticField/TestStatic.c
+        StaticField/TestStatic.h
 )
 
-include_directories(AccessControl)
+include_directories(AccessControl Classes Inheritance StaticField)
