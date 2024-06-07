@@ -181,7 +181,8 @@ int main() {
     return *(struct Parent *) &parent;
   } 
   ```
-- 之后就可以使用 `new()` 方法来实例化一个对象，然后使用封装来访问私有变量
+- 之后就可以使用 `new()` 方法来实例化一个对象，然后使用对应的
+  `Accessor` 和 `Mutator` 来访问私有变量
 
 ## 静态域 (Static Field)
 
