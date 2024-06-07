@@ -170,7 +170,7 @@ int main() {
 - 在返回前，将 `ParentPriv` 类型的变量强制转换为 `Parent` 类型的变量
   ```c
   static struct Parent new(int public_var) {
-    struct ParentPriv parent = {
+    struct ParentPriv super = {
         .public_var = public_var,
         .public_func = &public_func,
         .private_var_setter = &private_var_setter,
@@ -178,7 +178,7 @@ int main() {
         .print = &print,
         .private_func = &private_func,
     };
-    return *(struct Parent *) &parent;
+    return *(struct Parent *) &super;
   } 
   ```
 - 之后就可以使用 `new()` 方法来实例化一个对象，然后使用对应的
@@ -216,20 +216,6 @@ int main() {
 绑定到同一个函数。静态域不可调用任何非静态域，因此可以在参数列表里面不
 列出 `this` 指针。
 
-本人能力有限，没有实现静态变量在类和实例中均可调用，
-
-所以最好直接通过类名调用静态域。
-
-## 抽象类，抽象方法，接口 (Abstract Class, Abstract Method, Interface)
-
-抽象类和接口的成员函数没有实现，在子类中实现。同时不允许实例化抽象类和接口。
-
-不允许实例化很简单，可以在 `new()` 方法中返回 `NULL` 来表示实例化失败，或
-直接不添加 `new()` 方法使之无法被实例化。
-
-在子类的 `new()` 方法中，可以分别实现基类的接口方法，然后手动绑定给基类的
-函数指针。
-
 在这种情况下，静态域可能受到更改，因此类所对应的 Class 结构体不能再定义为 `const` 类型。
 
 TestStatic.h
@@ -241,7 +227,24 @@ extern struct TestStaticClass {
 } TestStatic;
 ```
 
+本人能力有限，没有实现静态变量在类和实例中均可调用，
+
+所以最好直接通过类名调用静态域。
+
+## 抽象类，抽象方法，接口 (Abstract Class, Abstract Method, Interface)
+
+抽象类和接口的成员函数没有实现，在子类中实现。同时不允许实例化抽象类和接口。
+
+不允许实例化很简单，可以在 `new()` 方法中返回 `NULL` 来表示实例化失败，或
+直接不添加 `new()` 方法使之无法被实例化。当然约定只使用 `new()` 初始化，因为
+在 C语言中完全可以直接初始化结构体。
+
+在子类的 `new()` 方法中，可以分别实现基类的接口方法，然后手动绑定给基类的
+函数指针。
+
 本人未能实现抽象方法。
+
+抽象类和接口的实现参考 `/AbstractField/` 文件夹
 
 ## 方法重载 (Method Overloading)
 
@@ -256,6 +259,6 @@ extern struct TestStaticClass {
 参考 `/OverloadMethod/overload.c`,
 `/OverloadMethod/overload.h` 文件
 
-## 命名空间 (Namespace)
+## 命名空间/包 (Namespace/Package)
 
-[//]: # (TODO: )
+C语言没有命名空间的概念，可以通过约定的方式实现（虽然比较水）

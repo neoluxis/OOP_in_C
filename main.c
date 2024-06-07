@@ -7,6 +7,8 @@
 #include "Child.h"
 #include "TestStatic.h"
 #include "overload.h"
+#include "Car.h"
+#include "Vehicle.h"
 
 void animal_say(struct Animal *anm) {
   anm->say(anm);
@@ -23,11 +25,11 @@ void test_access_control() {
   struct Parent parent = Parent.new(3);
   struct Child child = Child.new(5);
   // call public fields
-  printf("parent.public_var: %d\n", parent.public_var);
+  printf("super.public_var: %d\n", parent.public_var);
   parent.public_func(&parent);
   parent.public_var = 5;
   parent.print(&parent);
-//  parent.private_func(&parent); // 报错
+//  super.private_func(&super); // 报错
   parent.private_var_setter(&parent, 10);
   parent.print(&parent);
 
@@ -52,8 +54,14 @@ void test_overload() {
   o.overloaded(&o, 3, 3.14);
 }
 
+void test_abstract() {
+//  struct Vehicle v = Vehicle.new(4); // 会报错
+  struct Car c = Car.new(4);
+  c.super.run(&c.super);
+}
+
 int main() {
-  test_overload();
+  test_abstract();
   return 0;
 }
 
