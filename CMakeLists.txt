@@ -24,6 +24,8 @@ add_executable(C main.c
         AbstractField/Vehicle.h
         AbstractField/Car.c
         AbstractField/Car.h
+        Generic/TestGeneric.c
+        Generic/TestGeneric.h
 )
 
-include_directories(AccessControl Classes Inheritance StaticField AbstractField OverloadMethod)
+include_directories(AccessControl Classes Inheritance StaticField AbstractField OverloadMethod Generic)
