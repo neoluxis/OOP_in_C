@@ -24,8 +24,6 @@ add_executable(C main.c
         AbstractField/Vehicle.h
         AbstractField/Car.c
         AbstractField/Car.h
-        Generic/TestGeneric.c
-        Generic/TestGeneric.h
         MockPackage/Pack1/pack1.c
         MockPackage/Pack1/pack1.h
         MockPackage/Pack2/pack2.c
