@@ -26,6 +26,10 @@ add_executable(C main.c
         AbstractField/Car.h
         Generic/TestGeneric.c
         Generic/TestGeneric.h
+        MockPackage/Pack1/pack1.c
+        MockPackage/Pack1/pack1.h
+        MockPackage/Pack2/pack2.c
+        MockPackage/Pack2/pack2.h
 )
 
 include_directories(AccessControl Classes Inheritance StaticField AbstractField OverloadMethod Generic)

@@ -236,13 +236,13 @@ extern struct TestStaticClass {
 抽象类和接口的成员函数没有实现，在子类中实现。同时不允许实例化抽象类和接口。
 
 不允许实例化很简单，可以在 `new()` 方法中返回 `NULL` 来表示实例化失败，或
-直接不添加 `new()` 方法使之无法被实例化。当然约定只使用 `new()` 初始化，因为
+直接不添加 `new()` 方法使之无法被实例化。当然我们要约定只使用 `new()` 初始化，因为
 在 C语言中完全可以直接初始化结构体。
 
 在子类的 `new()` 方法中，可以分别实现基类的接口方法，然后手动绑定给基类的
 函数指针。
 
-本人未能实现抽象方法。
+相对应的抽象方法可以直接把对应的函数指针绑定为 `NULL`
 
 抽象类和接口的实现参考 `/AbstractField/` 文件夹
 
@@ -259,9 +259,43 @@ extern struct TestStaticClass {
 参考 `/OverloadMethod/overload.c`,
 `/OverloadMethod/overload.h` 文件
 
-## 命名空间/包 (Namespace/Package)
+## 命名空间 (Namespace)
 
 C语言没有命名空间的概念，可以通过约定的方式实现（虽然比较水）
+
+## 包 (Package)
+
+C 语言无法强制模拟系统级的包机制（就像Java 或 Python），
+但是 通过 `__FILE__` 宏可以获取当前文件的路径，进而可以模拟项目内的包机制。
+
+### __FILE__ 宏
+
+`__FILE__` 宏是一个预定义宏，表示当前文件在项目中的路径。
+
+/home/xxx/workspace/OOP_in_C/main.c
+```c
+#include <stdio.h>
+int main() {
+  printf("File: %s\n", __FILE__);
+  return 0;
+}
+```
+会打印出 `File: /home/xxx/workspace/OOP_in_C/main.c`
+
+/home/xxx/workspace/OOP_in_C/MockPackage/MockPack.c
+```c
+#include <stdio.h>
+int main() {
+  printf("File: %s\n", __FILE__);
+  return 0;
+}
+```
+则会打印出 `File: /home/xxx/workspace/OOP_in_C/MockPackage/MockPack.c`
+
+通过字符串操作，可以获取到文件相对于项目根目录的路径，进而可以模拟包机制。
+
+- 有一个问题，及时使用这样的方法处理包机制，也仍然不允许同名， 
+  而且并不能通过 `包名.类名` 的方式来调用类，只能直接通过类名来调用类。
 
 ## 泛型 (Generic)
 
@@ -274,6 +308,6 @@ C语言没有命名空间的概念，可以通过约定的方式实现（虽然�
 - C 语言是一种面向过程的语言，但是通过结构体和函数指针，可以模拟部分面向对象编程的思想
 - C 语言的面向对象编程是通过结构体和函数指针来实现的
 - 虽然可以实现，但是实际应用中很鸡肋，语言特性并没有对其有很好的支持
-- 本人能力有限，实现的面向对象编程只是一个简单的模拟，像是反射等等都还未能实现，同时
+- 本人能力有限，实现的面向对象编程只是一个简单的模拟，许多功能都还未能实现，同时
   有些功能只能通过约定的方式实现，并不能在代码中强制实现。
 
